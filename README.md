@@ -11,7 +11,7 @@ where in the root:
 <script src='/home.js'></script>
 ```
 
-## Socket.io
+## Socket.io << DONE!
 Add socket.io and an edit page. The user should be able to go to /edit in the
 browser and add text to an input field that is sent to the backend and recieved
 again via the websocket connection.

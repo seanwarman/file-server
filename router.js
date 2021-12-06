@@ -2,6 +2,8 @@ const fs = require('fs')
 const promisify = require('util').promisify
 const readFile = promisify(fs.readFile)
 
+const routerBasePath = __dirname + '/app/userhome'
+
 function response(path) {
   return async (req, res) => {
     try {
@@ -19,5 +21,5 @@ function response(path) {
   }
 }
 module.exports = function(app) {
-  app.get('/:file', response(__dirname + '/app/userhome'))
+  app.get('/:file', response(routerBasePath))
 }
