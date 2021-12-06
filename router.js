@@ -19,5 +19,5 @@ function response(path) {
   }
 }
 module.exports = function(app) {
-  app.get('/:file', response(__dirname + '/userhome'))
+  app.get('/:file', response(__dirname + '/app/userhome'))
 }
