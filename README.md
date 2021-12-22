@@ -56,3 +56,25 @@ For example Yuri has a home dir with *home.html* inside so we can go to
 Using the `<port-number>` we defined with Gotty earlier, Yuri can go to
 **http://<ip-addr>:<port-number>** to log into his home dir and edit
 *home.html*.
+
+
+
+## Docker Updates
+Build the docker image using the script I've added:
+
+```posix
+./docker-build <username> <password> <port>
+```
+
+This will build the image, if it's not already, then it'll run a new docker
+container, making a user folder in home/ where they can start making files
+and folders.
+
+Each user has to have their own port at the moment, which isn't ideal but might
+be a limitation for gotty rather than this project. I'll have a think about it
+either way.
+
+We don't need to worry about changing the home dir anymore (from above) because
+each container doesn't have access to the underlying system anyway. We might as
+well keep the user folders within the project, which is cleaner ayway.
+
