@@ -1,0 +1,3 @@
+#!/bin/bash
+docker build -t file-server .
+docker run -d -v "$(pwd)/home/$1:/home/$1" -w /home/$1 -p $2:$2 --rm file-server bash -c "gotty -w /bin/bash"
