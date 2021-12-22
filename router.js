@@ -2,24 +2,29 @@ const fs = require('fs')
 const promisify = require('util').promisify
 const readFile = promisify(fs.readFile)
 
-const routerBasePath = __dirname + '/app/userhome'
+// This part can change to the dir you want to store your user's in.
+// For example on linux this could just be /home...
+const homedir = __dirname + '/app'
 
-function response(path) {
-  return async (req, res) => {
-    try {
-      const { params } = req
-      const { file: filename } = params
-      const filepath = `${path}/${filename}`
-      const ext = filename.slice(filename.lastIndexOf('.'), -1)
-      const file = await readFile(filepath, 'utf8')
+async function response(req, res) {
+  const { params } = req
+  const { file: filename, username } = params
+  const path = `${homedir}/${username}`
 
-      res.send(file)
-    } catch (e) {
-      res.status(404).send(e)
+  try {
+    const filepath = `${path}/${filename}`
+    const ext = filename.slice(filename.lastIndexOf('.'), -1)
+    const file = await readFile(filepath, 'utf8')
 
-    }
+    res.send(file)
+  } catch (e) {
+    console.error(e)
+    res.status(404).send(e)
+
   }
 }
+
+
 module.exports = function(app) {
-  app.get('/:file', response(routerBasePath))
+  app.get('/:username/:file', response)
 }
