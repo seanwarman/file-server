@@ -9,9 +9,9 @@ function response(path) {
     try {
       const { params } = req
       const { file: filename } = params
-
+      const filepath = `${path}/${filename}`
       const ext = filename.slice(filename.lastIndexOf('.'), -1)
-      const file = await readFile(`${path}/${filename}`, 'utf8')
+      const file = await readFile(filepath, 'utf8')
 
       res.send(file)
     } catch (e) {
