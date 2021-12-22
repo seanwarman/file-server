@@ -2,21 +2,18 @@ const fs = require('fs')
 const promisify = require('util').promisify
 const readFile = promisify(fs.readFile)
 
-// This part can change to the dir you want to store your users in.
-// For example on linux this could just be /home...
-const homeDir = __dirname + '/app/'
-
 async function response(req, res) {
-  try {
+    const { FILE_SERVER_HOME_DIR } = process.env
     const { params } = req
     const { userName } = params
     const filePath = params[0]
 
     if (!filePath) {
-      throw Error('No filePath param')
+      return
     }
 
-    const path = `${homeDir}${userName}${filePath}`
+  try {
+    const path = `${FILE_SERVER_HOME_DIR}${userName}${filePath}`
 
     const file = await readFile(path, 'utf8')
 

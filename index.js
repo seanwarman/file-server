@@ -1,8 +1,10 @@
 const express = require('express')
-const app = express()
 const http = require('http')
-const server = http.createServer(app)
 const router = require('./router.js')
+require('dotenv').config()
+
+const app = express()
+const server = http.createServer(app)
 
 const port = 8080
 
