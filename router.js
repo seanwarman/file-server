@@ -5,7 +5,7 @@ const readFile = promisify(fs.readFile)
 // You can set this variable in your bashrc/zshrc, otherwise the project
 // will just use this app's root folder, which is fine for development...
 const { FILE_SERVER_ROOT } = process.env
-const rootDir = FILE_SERVER_ROOT || __dirname + '/app/'
+const rootDir = FILE_SERVER_ROOT || __dirname + '/home/'
 
 async function response(req, res) {
     const { params } = req
