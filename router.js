@@ -2,7 +2,7 @@ const fs = require('fs')
 const promisify = require('util').promisify
 const readFile = promisify(fs.readFile)
 
-// This part can change to the dir you want to store your user's in.
+// This part can change to the dir you want to store your users in.
 // For example on linux this could just be /home...
 const homeDir = __dirname + '/app/'
 
