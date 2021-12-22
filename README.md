@@ -21,3 +21,38 @@ Linux system.
 
 If it's not set the app will look in the app dir instead, which is fine for
 local developement.
+
+## Deployment
+
+This project's kept in the cd3k dir on my server at the moment, just ssh in
+and run `npm start` inside the project root. I'm using tmux to run it in a
+detached session at the moment but will look into using docker in future, which
+will also include work for user scopes...
+
+## Users
+
+To add a new user log into the server as cd3k and run `adduser` to make them a
+home dir. The user will be able to see all files but only change their own.
+
+Run a new tmux session as that user, then start gotty:
+
+```posix
+gotty -w -p <port-number> -c <user:password> /bin/bash
+```
+
+Now the user will be able to log in on their browser.
+
+## Client
+
+The app is being run on port 8080 at the moment so you can go to the server's
+ip (which changes) and port and see any file based in the dir structure of any
+user's home dir.
+
+For example Yuri has a home dir with *home.html* inside so we can go to
+**http://<ip-addr>:8080/yuri/home.html** to see that file served.
+
+## Server
+
+Using the `<port-number>` we defined with Gotty earlier, Yuri can go to
+**http://<ip-addr>:<port-number>** to log into his home dir and edit
+*home.html*.
