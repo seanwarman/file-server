@@ -1,7 +1,6 @@
 const express = require('express')
 const http = require('http')
 const router = require('./router.js')
-require('dotenv').config()
 
 const app = express()
 const server = http.createServer(app)

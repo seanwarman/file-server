@@ -2,8 +2,12 @@ const fs = require('fs')
 const promisify = require('util').promisify
 const readFile = promisify(fs.readFile)
 
+// You can set this variable in your bashrc/zshrc, otherwise the project
+// will just use this app's root folder, which is fine for development...
+const { FILE_SERVER_ROOT } = process.env
+const rootDir = FILE_SERVER_ROOT || __dirname + '/app/'
+
 async function response(req, res) {
-    const { FILE_SERVER_HOME_DIR } = process.env
     const { params } = req
     const { userName } = params
     const filePath = params[0]
@@ -13,7 +17,7 @@ async function response(req, res) {
     }
 
   try {
-    const path = `${FILE_SERVER_HOME_DIR}${userName}${filePath}`
+    const path = `${rootDir}${userName}${filePath}`
 
     const file = await readFile(path, 'utf8')
 

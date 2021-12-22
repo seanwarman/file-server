@@ -11,19 +11,13 @@ where in the root:
 <script src='/home.js'></script>
 ```
 
-## Socket.io << DONE!
-Add socket.io and an edit page. The user should be able to go to /edit in the
-browser and add text to an input field that is sent to the backend and recieved
-again via the websocket connection.
+You can also make a directory and add files there.
 
-## DB Strings to HTML
-Replace the file structure in `app/userhome` into a db structure that stores
-the html and filename as strings. Then render the html string in the same way
-as it is now.
+### Env Vars
 
-## Live Updates
-Allow the rendered html to update as changes are being made from the /edit
-input field.
+The app reads a variable from your bashrc/zshrc if you have it, it's called
+FILE_SERVER_ROOT and should be set to the equivelent of the /home dir on a
+Linux system.
 
-## Script Updates
-Re-run a html file's script when that's updated as well.
+If it's not set the app will look in the app dir instead, which is fine for
+local developement.
