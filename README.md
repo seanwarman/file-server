@@ -13,34 +13,13 @@ where in the root:
 
 You can also make a directory and add files there.
 
-### Env Vars
-
-The app reads a variable from your bashrc/zshrc if you have it, it's called
-FILE_SERVER_ROOT and should be set to the equivelent of the /home dir on a
-Linux system.
-
-If it's not set the app will look in the app dir instead, which is fine for
-local developement.
-
 ## Deployment
 
 This project's kept in the cd3k dir on my server at the moment, just ssh in
-and run `npm start` inside the project root. I'm using tmux to run it in a
-detached session at the moment but will look into using docker in future, which
-will also include work for user scopes...
+and run `npm start` inside the project root. This'll start the app on port
+8080, it'll also be backgrounded so you can go about your business.
 
-## Users
-
-To add a new user log into the server as cd3k and run `adduser` to make them a
-home dir. The user will be able to see all files but only change their own.
-
-Run a new tmux session as that user, then start gotty:
-
-```posix
-gotty -w -p <port-number> -c <user:password> /bin/bash
-```
-
-Now the user will be able to log in on their browser.
+Use `npm run stop` to stop it.
 
 ## Client
 
@@ -57,10 +36,10 @@ Using the `<port-number>` we defined with Gotty earlier, Yuri can go to
 **http://<ip-addr>:<port-number>** to log into his home dir and edit
 *home.html*.
 
+## Users
 
-
-## Docker Updates
-Build the docker image using the script I've added:
+If you're ssh'd in as the root of admin user you can run a new container using
+the *docker-build* script:
 
 ```posix
 ./docker-build <username> <password> <port>
@@ -76,5 +55,4 @@ either way.
 
 We don't need to worry about changing the home dir anymore (from above) because
 each container doesn't have access to the underlying system anyway. We might as
-well keep the user folders within the project, which is cleaner ayway.
-
+well keep the user folders within the project, which is cleaner.
