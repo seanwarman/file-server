@@ -5,7 +5,7 @@ const router = require('./router.js')
 const app = express()
 const server = http.createServer(app)
 
-const port = 8080
+const port = 80
 
 router(app)
 
