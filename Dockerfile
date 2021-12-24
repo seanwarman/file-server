@@ -1,7 +1,5 @@
 # syntax=docker/dockerfile:1
 FROM ubuntu:latest
-ADD gotty_linux_amd64.tar.gz /usr/local/bin/
-ADD .gotty /home/
 ENV TERM=xterm-256color
 RUN apt-get -y update && \
     apt install -y curl vim ranger git && \

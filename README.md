@@ -24,7 +24,7 @@ Use `npm run stop` to stop it.
 ## Client
 
 The app is being run on port 8080 at the moment so you can go to the server's
-ip (which changes) and port and see any file based in the dir structure of any
+ip and port and see any file based in the dir structure of any
 user's home dir.
 
 For example Yuri has a home dir with *home.html* inside so we can go to
@@ -32,27 +32,32 @@ For example Yuri has a home dir with *home.html* inside so we can go to
 
 ## Server
 
-Using the `<port-number>` we defined with Gotty earlier, Yuri can go to
-**http://<ip-addr>:<port-number>** to log into his home dir and edit
-*home.html*.
+Run the gotty terminal emulator with:
+
+```posix
+./gotty-server.sh
+```
+
+This will use up a terminal so you'll prob want to do it in tmux. I'll add this
+to the app start command at some point.
+
+It's set to run on 3005.
 
 ## Users
 
-If you're ssh'd in as the root of admin user you can run a new container using
-the *docker-build* script:
+The server for each user can be accessed through the browser using gotty.
+
+Make a new user container with the **docker-useradd.sh** script...
 
 ```posix
-./docker-build <username> <password> <port>
+./docker-useradd.sh yuri
 ```
 
-This will build the image, if it's not already, then it'll run a new docker
-container, making a user folder in home/ where they can start making files
-and folders.
+This makes a container called `yuri-server` with a user and home dir in it
+called `yuri`. It also makes and binds that dir to another one inside the app's
+home dir.
 
-Each user has to have their own port at the moment, which isn't ideal but might
-be a limitation for gotty rather than this project. I'll have a think about it
-either way.
+Now you can go to the browser and run that container inside gotty. Add the
+user's name, the container name and the process you want to run as arguments...
 
-We don't need to worry about changing the home dir anymore (from above) because
-each container doesn't have access to the underlying system anyway. We might as
-well keep the user folders within the project, which is cleaner.
+http://myserve.org/?arg=yuri&arg=yuri-server&arg=bash
