@@ -5,7 +5,7 @@ const router = require('./router.js')
 const app = express()
 const server = http.createServer(app)
 
-const port = 80
+const port = process.argv[2] || 3000
 
 router(app)
 
