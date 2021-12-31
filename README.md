@@ -5,13 +5,21 @@ You can give it any extension, including no extension, it'll always render as
 html.
 
 You can also import any js file within the same dir by using the path as if
-where in the root:
+where in the home dir:
 
 ```html
-<script src='/home.js'></script>
+<script src='./home.js'></script>
 ```
 
-You can also make a directory and add files there.
+You can also make a directory and add files there, they will turn up in the
+http address under that same dir.
+
+You can also import any of the files in a script using `fetch`, rather than
+using a relative path you'd use the http address of the file:
+
+```js
+fetch('/userhome/home.js')
+```
 
 ## Deployment
 
