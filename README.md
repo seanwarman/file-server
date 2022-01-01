@@ -21,6 +21,12 @@ using a relative path you'd use the http address of the file:
 fetch('/userhome/home.js')
 ```
 
+## Template Support
+
+Myserve supports [pug](https://github.com/pugjs/pug) and
+[markdown](https://www.markdownguide.org) rendering. Just add either .pug or
+.md to the file and it'll get converted to html before it's sent.
+
 ## Deployment
 
 This project's kept in the cd3k dir on my server at the moment, just ssh in
