@@ -5,25 +5,29 @@ const readFile = promisify(fs.readFile)
 const rootDir = __dirname + '/home/'
 
 async function response(req, res) {
-    const { params } = req
-    const { userName } = params
-    const filePath = params[0]
+  const { params } = req
+  const { userName } = params
+  const filePath = params[0]
 
-    if (!filePath) {
-      return
-    }
+  if (!filePath) {
+    return
+  }
+
+  try {
+    return res.render(`${userName}${filePath}`)
+  } catch (e) {
+    console.log('Not a template file, sending it raw instead...')
+  }
 
   try {
     const path = `${rootDir}${userName}${filePath}`
-
     const file = await readFile(path, 'utf8')
-
     res.send(file)
   } catch (e) {
     console.error(e)
     res.status(404).send(e)
-
   }
+
 }
 
 module.exports = function(app) {

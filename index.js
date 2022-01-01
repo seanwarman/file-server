@@ -3,6 +3,8 @@ const http = require('http')
 const router = require('./router.js')
 
 const app = express()
+app.set('views', './home')
+
 const server = http.createServer(app)
 
 const port = process.argv[2] || 3000
