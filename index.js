@@ -8,10 +8,11 @@ const readFile = promisify(fs.readFile)
 
 const app = express()
 app.set('views', './home')
+app.engine('ejs', require('ejs').renderFile)
 app.engine('md', async (filePath, options, cb) => {
   const file = await readFile(filePath, 'utf8')
-
   return cb(null, marked.parse(file))
+
 })
 
 const server = http.createServer(app)

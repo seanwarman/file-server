@@ -23,8 +23,8 @@ fetch('/userhome/home.js')
 
 ## Template Support
 
-Myserve supports [pug](https://github.com/pugjs/pug) and
-[markdown](https://www.markdownguide.org) rendering. Just add either .pug or
+Myserve supports [ejs](https://github.com/mde/ejs) and
+[markdown](https://www.markdownguide.org) rendering. Just add either .ejs or
 .md to the file and it'll get converted to html before it's sent.
 
 ## Deployment

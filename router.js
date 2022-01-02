@@ -30,6 +30,35 @@ async function response(req, res) {
 
 }
 
+async function renderIndex(req, res) {
+  try {
+    return res.render('index.ejs', { homeDirs: ['sean', 'yuri', 'ella'] })
+
+  } catch (e) {
+    console.error(e)
+    res.status(404).send(e)
+
+  }
+
+}
+
+async function sendAsset(req, res) {
+  const { params } = req
+  const { asset } = params
+
+  try {
+    const path = __dirname + '/assets/' + asset
+    const file = await readFile(path)
+    res.send(file)
+  } catch (e) {
+    console.error(e)
+    res.status(404).send(e)
+  }
+
+}
+
 module.exports = function(app) {
+  app.get('/', renderIndex)
+  app.get('/assets/:asset', sendAsset)
   app.get('/:userName*?', response)
 }
