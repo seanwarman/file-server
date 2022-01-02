@@ -5,27 +5,78 @@
   <title></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cagliostro&family=Open+Sans:wght@300&family=Pushster&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Forum&family=Pushster&display=swap" rel="stylesheet">
   <style>
+
     body {
-      background: #d5c7b8;
+      background: #ffbe68;
     }
-    img {
-      float: left;
-      margin-left: -50px;
+
+    a {
+      font-family: 'Forum', sans-serif;
+      color: #3a3a3a;
+      font-size: 2.4rem;
+      text-decoration: none;
     }
-    h1 {
+
+    a:hover {
+      color: #565656bd;
+    }
+
+    a:active {
+      color: #565656;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .mascot {
+      flex: 1;
+      margin-top: 2em;
+    }
+
+    .mascot img {
+      filter: drop-shadow(8px 7px 0px #e5ab5b);
+    }
+
+    .home-dirs {
+      flex: 3;
+      padding: 30px;
+      margin-top: 4em;
+    }
+
+    .title {
+      text-align: end;
+      flex: 1;
       font-family: 'Pushster',cursive;
-      float: right;
-      margin-right: 30px;
       color: #3d3c3a;
-      font-size: 2.5rem;
+      font-size: 4.5rem;
+      padding-right: 60px;
     }
+
   </style>
 </head>
 <body>
-  <img src="/assets/myserve-icon-gograph-gg78993394-white-sm.png" />
-  <h1>Myserve</h1>
-    <%-homeDirs.map(userName => `<a href="http://localhost:8080/?arg=${userName}&arg=${userName}-server&arg=bash">${userName}</a>`).join('<br>')%>
+  <div class="row">
+
+    <div class="mascot">
+      <img src="/assets/myserve-icon-gograph-gg78993394-white-sm.png" />
+    </div>
+
+    <div class="home-dirs">
+    <%-
+      homeDirs.map(userName =>
+      `<a href="http://localhost:8080/?arg=${userName}&arg=${userName}-server&arg=bash">
+        ${userName}
+      </a>`
+      ).join('<br>')
+        %>
+      </div>
+
+      <h1 class="title">Myserve</h1>
+
+  </div>
+
 </body>
 </html>
