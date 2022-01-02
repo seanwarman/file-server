@@ -1,6 +1,8 @@
 const fs = require('fs')
-const promisify = require('util').promisify
+const { exec } = require('child_process')
+const { promisify } = require('util')
 const readFile = promisify(fs.readFile)
+const execAsync = promisify(exec)
 
 const rootDir = __dirname + '/home/'
 
@@ -31,8 +33,14 @@ async function response(req, res) {
 }
 
 async function renderIndex(req, res) {
+  const { stdout } = await execAsync(`ls ${rootDir}`)
+
+  const homeDirs = stdout
+    .split('\n')
+    .filter(file => !/\./g.test(file) || !file.length)
+
   try {
-    return res.render('index.ejs', { homeDirs: ['sean', 'yuri', 'ella'] })
+    return res.render('index.ejs', { homeDirs })
 
   } catch (e) {
     console.error(e)
