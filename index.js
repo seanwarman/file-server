@@ -16,7 +16,7 @@ app.engine('md', async (filePath, options, cb) => {
 
 const server = http.createServer(app)
 
-const port = process.argv[2] || 3000
+const port = process.argv[2] || 80
 
 router(app)
 
