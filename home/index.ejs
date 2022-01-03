@@ -38,6 +38,10 @@
       color: #000100;
     }
 
+    .banner {
+      height: 330px;
+    }
+
     .row {
       display: flex;
     }
@@ -72,20 +76,24 @@
     .form {
       position: relative;
       padding: 30px;
+      justify-content: end;
+      display: flex;
     }
 
     .row {
       display: flex;
+      width: 100%;
     }
 
     .inputs {
       display: flex;
       flex-direction: column;
-      padding-right: 15px;
+      align-items: flex-end;
+      width: 100%;
     }
 
-    .submit {
-      width: 60px;
+    label, input {
+      width: 100%;
     }
 
     .col-1 {
@@ -104,30 +112,40 @@
       margin-top: 15px;
     }
 
+    input:invalid {
+      border: 2px solid red;
+    }
+
+    #invalid-message {
+      color: red;
+    }
+
   </style>
 </head>
 <body>
 
+  <div class="banner row">
+    <div class="mascot col-3">
+      <img src="/assets/cover.png" />
+    </div>
+    <div class="form col-1">
+      <div class="row">
+        <div class="inputs">
+          <label class="mt-15" htmlFor="username">Username</label>
+          <input id="username" minlength="1" pattern="[A-za-z0-9]+" type="text" />
+          <label class="mt-15" htmlFor="password">Password</label>
+          <input id="password" minlength="1" type="password" />
+          <button id="submit" class="mt-15">
+            Create server
+          </button>
 
-  <div class="mascot">
-    <img src="/assets/cover.png" />
-  </div>
+          <p id="invalid-message"></p>
 
-  <div class="form">
-    <div class="row">
-      <div class="inputs col-1">
-        <label class="mt-15" htmlFor="username">Username</label>
-        <input id="username" type="text" />
-        <label class="mt-15" htmlFor="password">Password</label>
-        <input id="password" type="password" />
-        <button id="submit" class="submit mt-15">
-          Submit
-        </button>
-      </div>
-      <div class="col-3">
+        </div>
       </div>
     </div>
   </div>
+
 
   <div class="home-dirs">
     <%-
@@ -142,5 +160,56 @@
     %>
   </div>
 
+  <script>
+    const hashCode = function(pass) {
+      let hash = 0, i, chr;
+      if (pass.length === 0) return hash;
+      for (i = 0; i < pass.length; i++) {
+        chr   = pass.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+      }
+      return hash;
+    };
+
+    function showError(message) {
+      if (!message) message = `
+        Both Username and Password must be filled in.<br><br>
+        The Username must only contain alphanumeric charactors. Eg Aa to Zz.
+      `
+      document.getElementById('invalid-message').innerHTML = message
+    }
+
+    const button = document.getElementById('submit')
+
+    const username = document.getElementById('username')
+    const password = document.getElementById('password')
+    window.username = username
+
+    button.addEventListener('click', submit)
+
+    async function submit() {
+      if (
+        !username.validity.valid
+        || !password.validity.valid
+        || !username.value.length
+        || !password.value.length
+      ) {
+        showError()
+        return
+      }
+
+      try {
+        const res = await fetch(`/create-server/${username.value}/${hashCode(password.value)}`)
+        if (res.status !== 200) throw Error(res.statusText)
+        window.location.reload()
+      } catch (error) {
+        showError('There was an error creating your server:<br><br>' + error.message)
+        return
+      }
+
+    }
+
+  </script>
 </body>
 </html>
