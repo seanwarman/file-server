@@ -5,7 +5,8 @@
   <title></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Forum&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cutive+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
   <style>
 
     body {
@@ -13,7 +14,7 @@
     }
 
     a {
-      font-family: 'Forum', sans-serif;
+      font-family: 'Cutive Mono', monospace;
       color: #000100;
       font-size: 2.4rem;
       text-decoration: none;
@@ -43,31 +44,46 @@
     .home-dirs {
       flex: 3;
       padding: 30px;
-      margin-top: 11em;
+      margin-left: 4em;
       margin-right: 4em;
       text-align: end;
+    }
+
+    .dir-text {
+      background: white;
+      padding: 0 10px;
+      border-radius: 4px;
+      font-size: 1.4rem;
+    }
+
+    .la-file-code {
+      font-size: 1.7rem;
+      transform: translate(24px, 4px);
     }
 
   </style>
 </head>
 <body>
-  <div class="row">
 
-    <div class="mascot">
-      <img src="/assets/cover.png" />
+
+  <div class="mascot">
+    <img src="/assets/cover.png" />
+  </div>
+
+  <div class="home-dirs">
+  <%-
+    homeDirs.map(userName =>
+    `<a href="http://localhost:8080/?arg=${userName}&arg=${userName}-server&arg=bash">
+      <i class="las la-file-code"></i>
+      <span class="dir-text">
+        ${userName}
+      </span>
+    </a>`
+    ).join('')
+      %>
     </div>
 
-    <div class="home-dirs">
-    <%-
-      homeDirs.map(userName =>
-      `<a href="http://localhost:8080/?arg=${userName}&arg=${userName}-server&arg=bash">
-        ${userName}
-      </a>`
-      ).join('<br>')
-        %>
-      </div>
 
-  </div>
 
 </body>
 </html>
