@@ -27,6 +27,17 @@ Myserve supports [ejs](https://github.com/mde/ejs) and
 [markdown](https://www.markdownguide.org) rendering. Just add either .ejs or
 .md to the file and it'll get converted to html before it's sent.
 
+## Assets and Modules
+
+Anything inside the *assets* directory can be fetched using
+`fetch('/assets/my-file.png')` and anything installed into *node_modules* or
+*bower_modules* can be loaded using
+`fetch('/modules/<node_modules|bower_moules>/path/to/my/module.js')`.
+
+These directories are project-wide, meaning they're not controlled by the users
+making them effectively read only. But nothing's stopping users from installing
+their own modules and fetching them.
+
 ## Deployment
 
 This project's kept in the cd3k dir on my server at the moment, just ssh in

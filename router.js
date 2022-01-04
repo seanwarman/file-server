@@ -67,13 +67,27 @@ async function createServer(req, res) {
   const { params } = req
   const { userName, passwordHash } = params
 
+  // TODO: see https://stackoverflow.com/questions/1582894/how-to-send-password-securely-over-http
+  // on how to send this properly.
+
+  const masterPassHash = ''
+
+  if (passwordHash !== masterPassHash) {
+
+  }
+
+
   try {
     // TODO: prevent making the dir if there's a docker error.
 
-    await execFile(__dirname + '/docker-useradd.sh', [userName, 'password'])
+    const { stdout, stderr } = await execFile(__dirname + '/docker-useradd.sh', [userName, 'password'])
+    console.log('@FILTER stdout: ', stdout)
+    console.log('@FILTER stderr: ', stderr)
+
     res.send('Server created')
 
   } catch (error) {
+    console.log('@FILTER error: ', error)
     if (error.message.includes('Command failed')) return res.status(503).send({ message: 'Docker failed' })
     if (error.message.includes('File exists')) return res.status(409).send({ message: 'User exists' })
     res.status(500).send({ message: error.message })
@@ -81,9 +95,27 @@ async function createServer(req, res) {
   }
 }
 
+async function getModule(req, res) {
+  const { params } = req
+  const { initialPath } = params
+  const path = params[0]
+
+  if (!path || (initialPath !== 'node_modules' && initialPath !== 'bower_components')) {
+    return res.status(404).end()
+  }
+
+  try {
+    const file = await readFile(initialPath + path, 'utf8')
+    res.send(file)
+  } catch (error) {
+    res.status(500).end()
+  }
+}
+
 module.exports = function(app) {
   app.get('/', renderIndex)
   app.get('/assets/:asset', sendAsset)
+  app.get('/modules/:initialPath*?', getModule)
   app.get('/create-server/:userName/:passwordHash', createServer)
   app.get('/:userName*?', response)
 }
