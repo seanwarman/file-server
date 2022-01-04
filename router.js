@@ -1,7 +1,7 @@
-const fs = require('fs')
 const { promisify } = require('util')
-const readFile = promisify(fs.readFile)
-const { readdirSync } = fs
+const { readdirSync } = require('fs')
+const readFile = promisify(require('fs').readFile)
+const execFile = promisify(require('child_process').execFile)
 
 const rootDir = __dirname + '/home/'
 
@@ -63,8 +63,27 @@ async function sendAsset(req, res) {
 
 }
 
+async function createServer(req, res) {
+  const { params } = req
+  const { userName, passwordHash } = params
+
+  try {
+    // TODO: prevent making the dir if there's a docker error.
+
+    await execFile(__dirname + '/docker-useradd.sh', [userName, 'password'])
+    res.send('Server created')
+
+  } catch (error) {
+    if (error.message.includes('Command failed')) return res.status(503).send({ message: 'Docker failed' })
+    if (error.message.includes('File exists')) return res.status(409).send({ message: 'User exists' })
+    res.status(500).send({ message: error.message })
+
+  }
+}
+
 module.exports = function(app) {
   app.get('/', renderIndex)
   app.get('/assets/:asset', sendAsset)
+  app.get('/create-server/:userName/:passwordHash', createServer)
   app.get('/:userName*?', response)
 }

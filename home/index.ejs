@@ -197,17 +197,24 @@
       ) {
         showError()
         return
+
       }
 
       try {
         const res = await fetch(`/create-server/${username.value}/${hashCode(password.value)}`)
-        if (res.status !== 200) throw Error(res.statusText)
+        if (res.status === 409) return showError('User already exists, please try a different Username')
+        if (res.status === 503) return showError('There was an error creating your server, please try again')
+        if (res.status === 500) {
+          const data = await res.json()
+          return showError(data.message)
+        }
         window.location.reload()
-      } catch (error) {
-        showError('There was an error creating your server:<br><br>' + error.message)
-        return
-      }
 
+      } catch (error) {
+        console.log('Error creating server: ', error)
+        showError('There was an unknown error creating the server')
+
+      }
     }
 
   </script>
