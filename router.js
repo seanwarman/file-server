@@ -10,7 +10,7 @@ const { MASTER_PASSWORD } = require('./env.js')
 const rootDir = __dirname + '/home/'
 
 async function response(req, res) {
-  const { params } = req
+  const { params, query } = req
   const { userName } = params
   const filePath = params[0]
 
@@ -19,7 +19,7 @@ async function response(req, res) {
   }
 
   try {
-    return res.render(`${userName}${filePath}`)
+    return res.render(`${userName}${filePath}`, query)
   } catch (e) {
     console.log('Not a template file, sending it raw instead...')
   }

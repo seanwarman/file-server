@@ -11,6 +11,7 @@ const app = express()
 
 app.use(bodyParser.json())
 app.set('views', './home')
+app.set('view engine', 'ejs')
 app.engine('ejs', require('ejs').renderFile)
 app.engine('md', async (filePath, options, cb) => {
   const file = await readFile(filePath, 'utf8')

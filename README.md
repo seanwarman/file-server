@@ -1,8 +1,6 @@
 # File Server
-Add a page to `app/userhome` and you can go to it in the browser.
 
-You can give it any extension, including no extension, it'll always render as
-html.
+Add a page to `app/userhome` and you can go to it in the browser.
 
 You can also import any js file within the same dir by using the path as if
 where in the home dir:
@@ -27,6 +25,16 @@ Myserve supports [ejs](https://github.com/mde/ejs) and
 [markdown](https://www.markdownguide.org) rendering. Just add either .ejs or
 .md to the file and it'll get converted to html before it's sent.
 
+ejs is the default view so, for example, if you had two files both named home...
+
+```posix
+$ ls
+home.html home.ejs
+```
+
+...and you went to **/username/home**, the ejs file will be the one that's
+served.
+
 ## Assets and Modules
 
 Anything inside the *assets* directory can be fetched using
@@ -34,9 +42,9 @@ Anything inside the *assets* directory can be fetched using
 *bower_modules* can be loaded using
 `fetch('/modules/<node_modules|bower_moules>/path/to/my/module.js')`.
 
-These directories are project-wide, meaning they're not controlled by the users
+These directories are project-wide, meaning they're not controlled by the users,
 making them effectively read only. But nothing's stopping users from installing
-their own modules and fetching them.
+their own modules and fetching them from their own user server.
 
 ## Development
 
@@ -91,7 +99,7 @@ Run the gotty terminal emulator with:
 This will use up a terminal so you'll prob want to do it in tmux. I'll add this
 to the app start command at some point.
 
-It's set to run on 3005.
+It's set to run on 8080.
 
 ## Users
 
@@ -100,7 +108,7 @@ The server for each user can be accessed through the browser using gotty.
 Make a new user container with the **docker-useradd.sh** script...
 
 ```posix
-./docker-useradd.sh yuri
+./docker-useradd.sh yuri yurispassword
 ```
 
 This makes a container called `yuri-server` with a user and home dir in it
