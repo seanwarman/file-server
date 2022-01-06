@@ -3,6 +3,7 @@ const { readdirSync } = require('fs')
 const CryptoJS = require('crypto-js')
 const readFile = promisify(require('fs').readFile)
 const execFile = promisify(require('child_process').execFile)
+const exec = promisify(require('child_process').exec)
 
 const { MASTER_PASSWORD } = require('./env.js')
 
@@ -35,20 +36,23 @@ async function response(req, res) {
 }
 
 async function renderIndex(req, res) {
-
-  const homeDirs = readdirSync(rootDir, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name)
-
   try {
-    return res.render('index.ejs', { homeDirs })
+    const { stdout, stderr } = await exec('docker ps -f "ancestor=file-server" --format "{{.Names}}"')
+
+    if (stderr) throw Error(stderr)
+
+    const servers = stdout
+      .split('\n')
+      .map(name => name.replace(/-server/, ''))
+      .filter(name => name.length)
+
+    res.render('index.ejs', { servers })
 
   } catch (e) {
     console.error(e)
     res.status(404).send(e)
 
   }
-
 }
 
 async function sendAsset(req, res) {

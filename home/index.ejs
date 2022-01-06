@@ -151,7 +151,7 @@
 
   <div class="home-dirs">
     <%-
-      homeDirs.map(userName =>
+      servers.map(userName =>
         `<a target="_blank" href="http://localhost:8080/?arg=${userName}&arg=${userName}-server&arg=bash">
           <i class="las la-file-code"></i>
           <span class="dir-text">
