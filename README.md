@@ -38,6 +38,31 @@ These directories are project-wide, meaning they're not controlled by the users
 making them effectively read only. But nothing's stopping users from installing
 their own modules and fetching them.
 
+## Development
+
+Add an env.js file to the root with your own master password in it:
+
+```js
+module.exports = {
+  MASTER_PASSWORD: 'mypassword'
+}
+```
+
+Then run the app on port 3000 with:
+
+```bash
+npm run dev
+```
+
+You'll also need to start the gotty server by running:
+
+```bash
+./gotty-server.sh <username:password>
+```
+
+*Note* if you're on a Mac or Windows you'll have to install `gotty` first but the
+binary is included in this app for Linux.
+
 ## Deployment
 
 This project's kept in the cd3k dir on my server at the moment, just ssh in
