@@ -1,7 +1,10 @@
 const { promisify } = require('util')
 const { readdirSync } = require('fs')
+const CryptoJS = require('crypto-js')
 const readFile = promisify(require('fs').readFile)
 const execFile = promisify(require('child_process').execFile)
+
+const { MASTER_PASSWORD } = require('./env.js')
 
 const rootDir = __dirname + '/home/'
 
@@ -64,23 +67,37 @@ async function sendAsset(req, res) {
 }
 
 async function createServer(req, res) {
-  const { params } = req
-  const { userName, passwordHash } = params
+  const { params, headers } = req
+  const { userName } = params
+  const { authorisation } = headers
 
-  // TODO: see https://stackoverflow.com/questions/1582894/how-to-send-password-securely-over-http
-  // on how to send this properly.
+  if (!authorisation) return res.status(401).end()
 
-  const masterPassHash = ''
+  // Un-base64 the auth header and remove the 'Basic ' bit from the beginning...
+  const encrypted = new Buffer
+    .from(authorisation, 'base64').toString().split(' ')[1]
 
-  if (passwordHash !== masterPassHash) {
+  // Decrypt it using your master password. Then convert the CryptoJS object into a utf8 string...
+  const decrypted = CryptoJS.AES.decrypt(encrypted, MASTER_PASSWORD).toString(CryptoJS.enc.Utf8)
 
-  }
+  console.log('@FILTER decrypted: ', decrypted)
 
+  // Finally split the user:password format...
+  const auth = decrypted.split(':')
+
+  const [username, password] = auth
+
+  console.log('@FILTER username: ', username)
+  console.log('@FILTER password: ', password)
+
+  // If the username isn't the same the client probably used the wrong master
+  // password so return unauthorised...
+  if (username !== userName) return res.status(401).end()
 
   try {
     // TODO: prevent making the dir if there's a docker error.
 
-    const { stdout, stderr } = await execFile(__dirname + '/docker-useradd.sh', [userName, 'password'])
+    const { stdout, stderr } = await execFile(__dirname + '/docker-useradd.sh', [username, password])
     console.log('@FILTER stdout: ', stdout)
     console.log('@FILTER stderr: ', stderr)
 
@@ -116,6 +133,6 @@ module.exports = function(app) {
   app.get('/', renderIndex)
   app.get('/assets/:asset', sendAsset)
   app.get('/modules/:initialPath*?', getModule)
-  app.get('/create-server/:userName/:passwordHash', createServer)
+  app.get('/create-server/:userName', createServer)
   app.get('/:userName*?', response)
 }

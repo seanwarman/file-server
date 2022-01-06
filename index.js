@@ -1,5 +1,6 @@
 const express = require('express')
 const http = require('http')
+const bodyParser = require('body-parser')
 const router = require('./router.js')
 const marked = require('marked')
 const fs = require('fs')
@@ -7,6 +8,8 @@ const promisify = require('util').promisify
 const readFile = promisify(fs.readFile)
 
 const app = express()
+
+app.use(bodyParser.json())
 app.set('views', './home')
 app.engine('ejs', require('ejs').renderFile)
 app.engine('md', async (filePath, options, cb) => {

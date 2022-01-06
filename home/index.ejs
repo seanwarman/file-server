@@ -135,6 +135,8 @@
           <input onkeypress="submitEarly(event)" id="username" minlength="1" pattern="[A-za-z0-9]+" type="text" />
           <label class="mt-15" htmlFor="password">Password</label>
           <input onkeypress="submitEarly(event)" id="password" minlength="1" type="password" />
+          <label class="mt-15" htmlFor="masterpassword">Master Password</label>
+          <input onkeypress="submitEarly(event)" id="masterpassword" minlength="1" type="password" />
           <button id="submit" class="mt-15">
             Create server
           </button>
@@ -187,23 +189,48 @@
     async function submit() {
       if (
         !username.validity.valid
-        || !password.validity.valid
         || !username.value.length
+        || !password.validity.valid
         || !password.value.length
+        || !masterpassword.validity.valid
+        || !masterpassword.value.length
       ) {
         showError()
         return
 
       }
 
+      function options(authHeader) {
+        return {
+          method: 'GET',
+          mode: 'same-origin',
+          cache:'no-cache',
+          headers: {
+            'Authorisation': authHeader
+          },
+        }
+      }
+
       try {
-        const res = await fetch(`/create-server/${username.value}/${CryptoJS.SHA256(password.value).toString()}`)
+        // Encrypt the user:password values...
+        const userpass = CryptoJS.AES.encrypt(`${username.value}:${password.value}`, masterpassword.value)
+
+        // Convert them into a base64 string (this is standard practice for the auth header)...
+        const authHeader = window.btoa(`Basic ${userpass}`)
+
+        // Send the authheader (detailed in `options`) but also add the username to the url...
+        const res = await fetch(`/create-server/${username.value}`, options(authHeader))
+
+        if (res.status === 401) return showError('Unauthorised')
         if (res.status === 409) return showError('User already exists, please try a different Username')
         if (res.status === 503) return showError('There was an error creating your server, please try again')
         if (res.status === 500) {
           const data = await res.json()
+          console.log('Server error: ', data)
           return showError(data.message)
         }
+
+        // Reload the window so the new server shows in the view...
         window.location.reload()
 
       } catch (error) {
