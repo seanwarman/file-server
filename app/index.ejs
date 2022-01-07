@@ -22,6 +22,7 @@
 
     body {
       padding: 3em;
+      color: #152925cc;
     }
 
     a {
@@ -56,21 +57,39 @@
     }
 
     .home-dirs {
-      flex: 3;
+      display: flex;
       padding: 30px;
-      text-align: end;
+      flex-direction: column;
+    }
+
+    .menu {
+      background: white;
+      margin-bottom: 10px;
+      height: 100px;
+      position: relative;
+      border-radius: 4px;
+      display: flex;
+      justify-content: flex-end;
+      max-width: 530px;
     }
 
     .dir-text {
-      background: white;
-      padding: 0 10px;
-      border-radius: 4px;
       font-size: 1.4rem;
+      top: 14px;
+      left: 39px;
+      position: absolute;
+    }
+
+    .las {
+      font-size: 2rem;
+      color: #000100b8;
     }
 
     .la-file-code {
       font-size: 1.7rem;
-      transform: translate(24px, 4px);
+      position: absolute;
+      left: 10px;
+      top: 10px;
     }
 
     .form {
@@ -152,17 +171,34 @@
   <div class="home-dirs">
     <%-
       servers.map(userName =>
-        `<a target="_blank" href="${baseUrl}:${gottyPort}/?arg=${userName}&arg=${userName}-server&arg=bash">
+        `<div class="menu">
           <i class="las la-file-code"></i>
-          <span class="dir-text">
+          <a
+            class="dir-text"
+            target="_blank"
+            href="${baseUrl}:${gottyPort}/?arg=${userName}&arg=${userName}-server&arg=bash"
+          >
             ${userName}
-          </span>
-        </a>`
+          </a>
+          <br>
+            <a href="javascript;" data-user-name="${userName}" class="delete">
+              <i class="las la-window-close"></i>
+            </a>
+        </div>`
       ).join('')
     %>
   </div>
 
   <script type="text/javascript" src="/modules/bower_components/crypto-js/crypto-js.js"></script>
+  <script>
+    const deleteServer = el => event => {
+      const { userName } = el.dataset
+    }
+
+    for (el of document.getElementsByClassName('delete')) {
+      el.addEventListener('click', deleteServer(el))
+    }
+  </script>
   <script>
     function showError(message) {
       if (!message) message = `

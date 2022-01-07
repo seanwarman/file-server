@@ -7,7 +7,7 @@ const exec = promisify(require('child_process').exec)
 
 const { MASTER_PASSWORD, BASE_URL, GOTTY_PORT } = require('./env.js')
 
-const rootDir = __dirname + '/home/'
+const rootDir = __dirname + '/app/home/'
 
 async function response(req, res) {
   const { params, query } = req

@@ -10,7 +10,7 @@ const readFile = promisify(fs.readFile)
 const app = express()
 
 app.use(bodyParser.json())
-app.set('views', './home')
+app.set('views', './app')
 app.set('view engine', 'ejs')
 app.engine('ejs', require('ejs').renderFile)
 app.engine('md', async (filePath, options, cb) => {
