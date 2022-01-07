@@ -71,6 +71,14 @@ You'll also need to start the gotty server by running:
 *Note* if you're on a Mac or Windows you'll have to install `gotty` first but the
 binary is included in this app for Linux.
 
+## Master Password and Server Creds
+
+Whenever a user wants to make a new server they'll have to use the master
+password you assigned to `MASTER_PASSWORD` to do it.
+
+There's some basic auth on the servers which you set with the *gotty-server.sh*
+command (username:password).
+
 ## Deployment
 
 This project's kept in the cd3k dir on my server at the moment, just ssh in
