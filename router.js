@@ -5,7 +5,7 @@ const readFile = promisify(require('fs').readFile)
 const execFile = promisify(require('child_process').execFile)
 const exec = promisify(require('child_process').exec)
 
-const { MASTER_PASSWORD } = require('./env.js')
+const { MASTER_PASSWORD, BASE_URL, GOTTY_PORT } = require('./env.js')
 
 const rootDir = __dirname + '/home/'
 
@@ -46,7 +46,11 @@ async function renderIndex(req, res) {
       .map(name => name.replace(/-server/, ''))
       .filter(name => name.length)
 
-    res.render('index.ejs', { servers })
+    res.render('index.ejs', {
+      servers,
+      baseUrl: BASE_URL || 'http://localhost',
+      gottyPort: GOTTY_PORT || '8080',
+    })
 
   } catch (e) {
     console.error(e)

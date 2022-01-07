@@ -81,20 +81,43 @@ command (username:password).
 
 ## Deployment
 
-This project's kept in the cd3k dir on my server at the moment, just ssh in
-and run `npm start` inside the project root. This'll start the app on port
-8080, it'll also be backgrounded so you can go about your business.
+Add a couple of extra env vars to *env.js*:
 
-Use `npm run stop` to stop it.
+```js
+module.exports = {
+  // ...
+  BASE_URL: 'http://myserveraddress.org',
+  GOTTY_PORT: '8080', // Or any port you want
+}
+```
+
+Install docker and get it up and running. Also, if you're using a non-root user
+you'll have to make a docker group so sudo isn't needed... [docker linux post
+install](https://docs.docker.com/engine/install/linux-postinstall/).
+
+I'm running the app in tmux (until I work out a single command for the gotty
+server and the app).
+
+Open a tmux session and do:
+
+```posix
+npm i && npm start
+```
+
+Then in another window do:
+
+```posix
+./gotty-server.sh username:password
+```
 
 ## Client
 
-The app is being run on port 8080 at the moment so you can go to the server's
+The app is being run on port 3000 at the moment so you can go to the server's
 ip and port and see any file based in the dir structure of any
 user's home dir.
 
 For example Yuri has a home dir with *home.html* inside so we can go to
-**http://<ip-addr>:8080/yuri/home.html** to see that file served.
+**http://<ip-addr>:3000/yuri/home.html** to see that file served.
 
 ## Server
 
