@@ -7,7 +7,8 @@
     "dev": "nodemon index.js 3000",
     "start": "nodemon index.js 80",
     "pm2": "pm2",
-    "bower": "bower"
+    "bower": "bower",
+    "nodemon": "nodemon"
   },
   "dependencies": {
     "body-parser": "^1.19.1",

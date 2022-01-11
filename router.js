@@ -49,7 +49,7 @@ async function renderIndex(req, res) {
     res.render('index.ejs', {
       servers,
       baseUrl: BASE_URL || 'http://localhost',
-      gottyPort: GOTTY_PORT || '8080',
+      gottyPort: GOTTY_PORT || '8081',
     })
 
   } catch (e) {

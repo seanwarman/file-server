@@ -176,14 +176,15 @@
           <a
             class="dir-text"
             target="_blank"
-            href="${baseUrl}:${gottyPort}/?arg=${userName}&arg=${userName}-server&arg=bash"
+            href="${baseUrl}:${gottyPort}/?arg=${userName}-server&arg=bash"
           >
             ${userName}
           </a>
+<!--
           <br>
-            <a href="javascript;" data-user-name="${userName}" class="delete">
+                <a href="javascript;" data-user-name="${userName}" class="delete">
               <i class="las la-window-close"></i>
-            </a>
+          </a> -->
         </div>`
       ).join('')
     %>
@@ -191,13 +192,13 @@
 
   <script type="text/javascript" src="/modules/bower_components/crypto-js/crypto-js.js"></script>
   <script>
-    const deleteServer = el => event => {
-      const { userName } = el.dataset
-    }
-
-    for (el of document.getElementsByClassName('delete')) {
-      el.addEventListener('click', deleteServer(el))
-    }
+//    const deleteServer = el => event => {
+//      const { userName } = el.dataset
+//    }
+//
+//    for (el of document.getElementsByClassName('delete')) {
+//      el.addEventListener('click', deleteServer(el))
+//    }
   </script>
   <script>
     function showError(message) {

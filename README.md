@@ -150,3 +150,39 @@ Now you can go to the browser and run that container inside gotty. Add the
 user's name, the container name and the process you want to run as arguments...
 
 http://myserve.org/?arg=yuri&arg=yuri-server&arg=bash
+
+## Development
+
+I've gotten some of the way to having VSCode run from inside a server by using
+[openvscode-server](https://github.com/gitpod-io/openvscode-server).
+
+From your server cli run:
+
+```posix
+curl -LO https://github.com/gitpod-io/openvscode-server/releases/download/openvscode-server-v1.63.2/openvscode-server-v1.63.2-linux-x64.tar.gz
+tar -xzf openvscode-server-v1.63.2-linux-x64.tar.gz
+cd openvscode-server-v1.63.2-linux-x64
+./server.sh
+```
+
+This'll run the server on localhost from within a docker container. Because
+it's inside a container you'll have to find the container's ip address to
+connect, localhost won't work.
+
+```
+docker inspect yuri-server
+```
+
+Will list the ip under `NetworkSettings.IPAddress`. If you're running the app
+locally you can then replace localhost with this ip and it'll work but I'm not
+sure this'll work on a live server, it might just serve to the public ip.
+
+The better option would be to run the VSCode part seperately anyway so that
+we're not having to install the binary in each folder.
+
+Maybe add a button to the homepage that runs the VSCode server and stops it etc
+(the only downside to this is that the terminal won't work properly).
+
+Or we could include the vscode install with the image.
+
+Or bind a folder with the binary inside.
