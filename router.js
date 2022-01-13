@@ -120,27 +120,56 @@ async function createServer(req, res) {
   }
 }
 
-async function getModule(req, res) {
-  const { params } = req
-  const { initialPath } = params
-  const path = params[0]
+function getModule(type) {
+  return async function (req, res) {
+    const { params } = req
+    const { path: initialPath } = params
+    const path = params[0]
 
-  if (!path || (initialPath !== 'node_modules' && initialPath !== 'bower_components')) {
-    return res.status(404).end()
+    if (!path) {
+      return res.status(404).end()
+    }
+
+    const ext = path.match(/\.\w+$/)[0]
+
+    if (ext === '.js') {
+      res.set('Content-Type', 'application/javascript')
+    } else if (ext === '.data') {
+      res.set('Content-Type', 'application/wasm')
+    } else if (!ext) {
+      res.set('Content-Type', 'text/plain')
+    } else {
+      res.set('Content-Type', `application/${ext.slice(1)}`)
+    }
+
+    try {
+      const file = await readFile(type + '/' + initialPath + '/' + path, 'utf8')
+      res.send(file)
+    } catch (error) {
+      res.status(500).end()
+    }
   }
+}
 
-  try {
-    const file = await readFile(initialPath + path, 'utf8')
-    res.send(file)
-  } catch (error) {
-    res.status(500).end()
+function renderFile(path) {
+  return async function (req, res) {
+
+    try {
+      const file = await readFile(path, 'utf8')
+      res.send(file)
+    } catch (error) {
+      res.status(500).end()
+    }
+
   }
 }
 
 module.exports = function(app) {
   app.get('/', renderIndex)
+  app.get('/test', renderFile(__dirname + '/test.html'))
   app.get('/assets/:asset', sendAsset)
-  app.get('/modules/:initialPath*?', getModule)
+  app.get('/node_modules/:path*?', getModule('node_modules'))
+  app.get('/bower_components/:path*?', getModule('bower_components'))
   app.get('/create-server/:userName', createServer)
   app.get('/:userName*?', response)
 }
