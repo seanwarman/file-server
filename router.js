@@ -60,6 +60,11 @@ async function renderIndex(req, res) {
 }
 
 async function renderTerm(req, res) {
+  // TODO: this part will replace the gotty-server.sh script, it'll need to
+  // exec into the running docker container by the user's name.
+  //
+  // Then we can finally plug in the actual auth part!
+
   try {
     res.render('term.ejs')
   } catch (e) {

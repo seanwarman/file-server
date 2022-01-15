@@ -16,6 +16,9 @@ const termCmdOut = io => data => {
 }
 
 module.exports = io => io.on('connection', socket => {
+  // TODO: work out how to keep the process running after the user's closed the
+  // window. So when they refresh they don't have to start from scratch.
+
   const proc = pty.spawn(shell, [] , {
     name: socket.id,
     cwd: __dirname,
