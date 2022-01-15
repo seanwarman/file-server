@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Terminal</title>
+  <link rel="stylesheet" href="node_modules/xterm/css/xterm.css" />
+  <script src="node_modules/xterm/lib/xterm.js"></script>
+  <script src="node_modules/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+</head>
+<style>
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+#terminal {
+  height: 100%;
+}
+</style>
+<body>
+  <div id="terminal"></div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const config = {
+    cursorBlink: true,
+    fontSize: 12,
+    minimumContrastRatio: 3,
+    // This is amazeballz btw but super slow. It builds everything out of
+    // html els and CSS (I'm thinking img previews/videos, webpage snippets
+    // in terminal)...
+    // rendererType: 'dom',
+    theme: {
+      background: '#2e2e2e',
+      green: '#00c300',
+      foreground: '#c3c3c3',
+    }
+  }
+
+  const socket = io()
+  const term = new Terminal(config)
+  const fitAddon = new FitAddon.FitAddon()
+  let termEl = document.getElementById('terminal')
+
+  // Initialise xterm
+  term.loadAddon(fitAddon)
+  term.open(termEl)
+  term.focus()
+
+  // Set up socket handlers
+  term.onKey(({ key }) => socket.emit('term-cmd', key))
+  socket.on('term-cmd', data => data && term.write(data))
+
+  // Link the window and terminal sizes together
+  const fit = () => {
+    const data = fitAddon.proposeDimensions()
+    socket.emit('window-resize', data)
+    fitAddon.fit()
+  }
+  fit()
+  window.addEventListener('resize', fit)
+
+  // Set up copy/paste
+  termEl.addEventListener('copy', () => navigator.clipboard.writeText(term.getSelection()))
+  // TODO: get paste working...
+  // termEl.addEventListener('paste', () => {
+  //     console.log('@FILTER pasting...')
+  // })
+
+  // Set body background to match config theme
+  document.getElementsByTagName('body')[0].style.background = config.theme.background
+</script>
+</html>
+

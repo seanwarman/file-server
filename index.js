@@ -1,13 +1,16 @@
 const express = require('express')
 const http = require('http')
+const { Server } = require('socket.io')
 const bodyParser = require('body-parser')
-const router = require('./router.js')
 const marked = require('marked')
 const fs = require('fs')
 const promisify = require('util').promisify
-const readFile = promisify(fs.readFile)
+
+const httpRouter = require('./router.js')
+const socketRouter = require('./socket-router.js')
 
 const app = express()
+const readFile = promisify(fs.readFile)
 
 app.use(bodyParser.json())
 app.set('views', './app')
@@ -20,10 +23,12 @@ app.engine('md', async (filePath, options, cb) => {
 })
 
 const server = http.createServer(app)
+const io = new Server(server)
+
+httpRouter(app)
+socketRouter(io)
 
 const port = process.argv[2] || 80
-
-router(app)
 
 server.listen(port, () => {
   console.log(`listening on ${port}`)

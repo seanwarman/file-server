@@ -59,6 +59,15 @@ async function renderIndex(req, res) {
   }
 }
 
+async function renderTerm(req, res) {
+  try {
+    res.render('term.ejs')
+  } catch (e) {
+    console.error(e)
+    res.status(404).send(e)
+  }
+}
+
 async function sendAsset(req, res) {
   const { params } = req
   const { asset } = params
@@ -121,26 +130,22 @@ async function createServer(req, res) {
 }
 
 async function getModule(req, res) {
-  const { params } = req
-  const { initialPath } = params
-  const path = params[0]
-
-  if (!path || (initialPath !== 'node_modules' && initialPath !== 'bower_components')) {
-    return res.status(404).end()
-  }
+  const { path } = req
 
   try {
-    const file = await readFile(initialPath + path, 'utf8')
-    res.send(file)
+    await res.sendFile(__dirname + path)
   } catch (error) {
+    console.log(error)
     res.status(500).end()
   }
 }
 
 module.exports = function(app) {
   app.get('/', renderIndex)
+  app.get('/term', renderTerm)
   app.get('/assets/:asset', sendAsset)
-  app.get('/modules/:initialPath*?', getModule)
+  app.get('/node_modules/:path*?', getModule)
+  app.get('/bower_components/:path*?', getModule)
   app.get('/create-server/:userName', createServer)
   app.get('/:userName*?', response)
 }
