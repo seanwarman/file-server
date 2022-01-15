@@ -1,7 +1,7 @@
 const pty = require('node-pty')
 const os = require('os')
 
-const shell = os.platform === 'darwin' ? 'zsh' : 'bash'
+const shell = os.platform() === 'darwin' ? 'zsh' : 'bash'
 
 const termCmdIn = proc => data => {
   proc.write(data)
