@@ -19,18 +19,25 @@ module.exports = io => io.on('connection', socket => {
   // TODO: work out how to keep the process running after the user's closed the
   // window. So when they refresh they don't have to start from scratch.
 
-  const proc = pty.spawn(shell, [] , {
-    name: socket.id,
-    cwd: __dirname,
-    env: process.env,
-    handleFlowControl: true,
+  socket.on('user-connect', ({ userName, id }) => {
+    if (id !== socket.id) {
+      console.log('Ids don\'t match')
+      return
+    }
+
+    const proc = pty.spawn('docker', ['exec', '-it', `${userName}-server`, 'login', userName] , {
+      name: socket.id,
+      cwd: __dirname,
+      env: process.env,
+      handleFlowControl: true,
+    })
+
+    // In
+    socket.on('window-resize', windResize(proc))
+    socket.on('term-cmd', termCmdIn(proc))
+
+    // Out
+    proc.on('data', termCmdOut(io))
   })
-
-  // In
-  socket.on('term-cmd', termCmdIn(proc))
-  socket.on('window-resize', windResize(proc))
-
-  // Out
-  proc.on('data', termCmdOut(io))
 })
 

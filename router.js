@@ -59,14 +59,12 @@ async function renderIndex(req, res) {
   }
 }
 
-async function renderTerm(req, res) {
-  // TODO: this part will replace the gotty-server.sh script, it'll need to
-  // exec into the running docker container by the user's name.
-  //
-  // Then we can finally plug in the actual auth part!
+async function renderShell(req, res) {
+  const { params } = req
+  const { userName } = params
 
   try {
-    res.render('term.ejs')
+    res.render('shell.ejs')
   } catch (e) {
     console.error(e)
     res.status(404).send(e)
@@ -102,15 +100,10 @@ async function createServer(req, res) {
   // Decrypt it using your master password. Then convert the CryptoJS object into a utf8 string...
   const decrypted = CryptoJS.AES.decrypt(encrypted, MASTER_PASSWORD).toString(CryptoJS.enc.Utf8)
 
-  console.log('@FILTER decrypted: ', decrypted)
-
   // Finally split the user:password format...
   const auth = decrypted.split(':')
 
   const [username, password] = auth
-
-  console.log('@FILTER username: ', username)
-  console.log('@FILTER password: ', password)
 
   // If the username isn't the same the client probably used the wrong master
   // password so return unauthorised...
@@ -120,13 +113,10 @@ async function createServer(req, res) {
     // TODO: prevent making the dir if there's a docker error.
 
     const { stdout, stderr } = await execFile(__dirname + '/docker-useradd.sh', [username, password])
-    console.log('@FILTER stdout: ', stdout)
-    console.log('@FILTER stderr: ', stderr)
 
     res.send('Server created')
 
   } catch (error) {
-    console.log('@FILTER error: ', error)
     if (error.message.includes('Command failed')) return res.status(503).send({ message: 'Docker failed' })
     if (error.message.includes('File exists')) return res.status(409).send({ message: 'User exists' })
     res.status(500).send({ message: error.message })
@@ -147,10 +137,10 @@ async function getModule(req, res) {
 
 module.exports = function(app) {
   app.get('/', renderIndex)
-  app.get('/term', renderTerm)
   app.get('/assets/:asset', sendAsset)
   app.get('/node_modules/:path*?', getModule)
   app.get('/bower_components/:path*?', getModule)
+  app.get('/shell/:userName', renderShell)
   app.get('/create-server/:userName', createServer)
   app.get('/:userName*?', response)
 }
