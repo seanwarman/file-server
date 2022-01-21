@@ -29,7 +29,6 @@ module.exports = io => io.on('connection', socket => {
       name: socket.id,
       cwd: __dirname,
       env: process.env,
-      handleFlowControl: true,
     })
 
     // In
