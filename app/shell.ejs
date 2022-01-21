@@ -67,10 +67,15 @@ html, body {
 
   // Set up copy/paste
   termEl.addEventListener('copy', () => navigator.clipboard.writeText(term.getSelection()))
-  // TODO: get paste working...
-  // termEl.addEventListener('paste', () => {
-  //     console.log('@FILTER pasting...')
-  // })
+  term.attachCustomKeyEventHandler(async e => {
+    if (e.key === 'v' && (e.metaKey || e.ctrlKey)) {
+      let cp = await navigator.clipboard.read()
+      let blob = await cp[0].getType(cp[0].types[0])
+      socket.emit('term-cmd', await blob.text())
+      return false
+    }
+    return true
+  })
 
   // Set body background to match config theme
   document.getElementsByTagName('body')[0].style.background = config.theme.background
