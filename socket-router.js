@@ -25,7 +25,7 @@ module.exports = io => io.on('connection', socket => {
       return
     }
 
-    const proc = pty.spawn('docker', ['exec', '-it', `${userName}-server`, 'login', userName] , {
+    const proc = pty.spawn('docker', ['exec', '-it', '-u', userName, `${userName}-server`, 'bash'] , {
       name: socket.id,
       cwd: __dirname,
       env: process.env,
