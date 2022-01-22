@@ -30,7 +30,8 @@ html, body {
     minimumContrastRatio: 3,
     // This is amazeballz btw but super slow. It builds everything out of
     // html els and CSS (I'm thinking img previews/videos, webpage snippets
-    // in terminal)...
+    // in terminal). You could even render another website inside the
+    // terminal then traverse the cursor over it.
     // rendererType: 'dom',
     theme: {
       background: '#2e2e2e',
@@ -42,13 +43,13 @@ html, body {
   const socket = io()
   const term = new Terminal(config)
   const fitAddon = new FitAddon.FitAddon()
-  const unicode11Addon = new Unicode11Addon.Unicode11Addon();
+  const unicode11Addon = new Unicode11Addon.Unicode11Addon()
   let termEl = document.getElementById('terminal')
 
   // Initialise xterm
   term.loadAddon(fitAddon)
-  term.loadAddon(unicode11Addon);
-  term.unicode.activeVersion = '11';
+  term.loadAddon(unicode11Addon)
+  term.unicode.activeVersion = '11'
   term.open(termEl)
   term.focus()
 

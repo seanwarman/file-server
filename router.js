@@ -1,9 +1,14 @@
 const { promisify } = require('util')
 const { readdirSync } = require('fs')
 const CryptoJS = require('crypto-js')
+const pty = require('node-pty')
+const os = require('os')
 const readFile = promisify(require('fs').readFile)
 const execFile = promisify(require('child_process').execFile)
 const exec = promisify(require('child_process').exec)
+
+const shell = os.platform() === 'darwin' ? 'zsh' : 'bash'
+
 
 const { MASTER_PASSWORD, BASE_URL, GOTTY_PORT } = require('./env.js')
 
@@ -57,6 +62,33 @@ async function renderIndex(req, res) {
     res.status(404).send(e)
 
   }
+}
+
+async function command(req, res) {
+  const { params, query } = req
+  const { userName } = params
+  const { contentType, args } = query
+
+  const proc = pty.spawn('docker', ['exec', '-it', '-u', userName, `${userName}-server`, ...args.split(' ')] , {
+    name: userName + '-command',
+    cwd: __dirname,
+    env: process.env,
+  })
+
+  let data = ''
+
+  proc.on('data', d => {
+    data += d 
+  })
+
+  proc.on('exit', () => {
+    if (contentType) {
+      res.set('Content-Type', contentType)
+    } else {
+      res.set('Content-Type', 'application/javascript')
+    }
+    res.send(data)
+  })
 }
 
 async function renderShell(req, res) {
@@ -117,6 +149,7 @@ async function createServer(req, res) {
     res.send('Server created')
 
   } catch (error) {
+    console.log(error)
     if (error.message.includes('Command failed')) return res.status(503).send({ message: 'Docker failed' })
     if (error.message.includes('File exists')) return res.status(409).send({ message: 'User exists' })
     res.status(500).send({ message: error.message })
@@ -140,6 +173,7 @@ module.exports = function(app) {
   app.get('/assets/:asset', sendAsset)
   app.get('/node_modules/:path*?', getModule)
   app.get('/bower_components/:path*?', getModule)
+  app.get('/command/:userName*?', command)
   app.get('/shell/:userName', renderShell)
   app.get('/create-server/:userName', createServer)
   app.get('/:userName*?', response)
