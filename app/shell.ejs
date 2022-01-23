@@ -55,11 +55,13 @@ html, body {
 
   // Set up socket handlers
   term.onKey(({ key }) => socket.emit('term-cmd', key))
+  socket.on('connect', () => {
+    socket.emit('user-connect', {
+      userName: window.location.pathname.split('/')[2],
+      id: socket.id,
+    })
+  }
   socket.on('term-cmd', data => data && term.write(data))
-  socket.on('connect', () => socket.emit('user-connect', {
-    userName: window.location.pathname.split('/')[2],
-    id: socket.id,
-  }))
 
   // Link the window and terminal sizes together
   const fit = () => {

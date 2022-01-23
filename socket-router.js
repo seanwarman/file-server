@@ -11,8 +11,8 @@ const windResize = proc => ({ cols, rows }) => {
   cols > 0 && rows > 0 && proc.resize(cols, rows)
 }
 
-const termCmdOut = io => data => {
-  data && io.emit('term-cmd', data)
+const termCmdOut = socket => data => {
+  data && socket.emit('term-cmd', data)
 }
 
 module.exports = io => io.on('connection', socket => {
@@ -36,7 +36,7 @@ module.exports = io => io.on('connection', socket => {
     socket.on('term-cmd', termCmdIn(proc))
 
     // Out
-    proc.on('data', termCmdOut(io))
+    proc.on('data', termCmdOut(socket))
   })
 })
 
