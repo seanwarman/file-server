@@ -7,19 +7,7 @@
 <body>
   <canvas id="vim-canvas"></canvas>
   <input id="vim-input" autocomplete="off" autofocus />
-  <script type="module">
-    import { VimWasm } from '/node_modules/vim-wasm/vimwasm.js';
-
-    const vim = new VimWasm({
-          canvas: document.getElementById('vim-canvas'),
-          input: document.getElementById('vim-input'),
-          workerScriptPath: '/node_modules/vim-wasm/vim.js',
-        });
-
-    // Setup callbacks if you need...
-
-    // Start Vim (give option object if necessary)
-    vim.start();
+  <script type="module" src="./node_modules/vim-wasm/vimwasm.js" />
   </script>
 </body>
 </html>
