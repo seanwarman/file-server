@@ -43,23 +43,24 @@
     }
 
     .row {
+      justify-content: center;
       display: flex;
     }
 
     .mascot {
       flex: 1;
+      justify-content: center;
+      display: flex;
     }
 
     .mascot img {
-      width: 720px;
-      margin-left: -6em;
-      margin-top: -12em;
+      margin-top: -11em;
+      margin-bottom: -6em;
     }
 
     .home-dirs {
       flex: 3;
       padding: 30px;
-      text-align: end;
     }
 
     .dir-text {
@@ -79,6 +80,7 @@
       padding: 30px;
       justify-content: end;
       display: flex;
+      max-width: 600px;
     }
 
     .row {
@@ -129,26 +131,30 @@
     <div class="mascot col-3">
       <img src="/assets/cover.png" />
     </div>
+  </div>
+  <div class="row">
     <div class="form col-1">
       <div class="row">
-        <div class="inputs">
-          <label class="mt-15" htmlFor="username">Username</label>
-          <input onkeypress="submitEarly(event)" id="username" minlength="1" pattern="[A-za-z0-9]+" type="text" />
-          <label class="mt-15" htmlFor="password">Password</label>
-          <input onkeypress="submitEarly(event)" id="password" minlength="1" type="password" />
-          <label class="mt-15" htmlFor="masterpassword">Master Password</label>
-          <input onkeypress="submitEarly(event)" id="masterpassword" minlength="1" type="password" />
-          <button id="submit" class="mt-15">
-            Create server
-          </button>
+        <div>
+          <p>Make your own linux server by filling the form below</p>
+          <div class="inputs">
+            <label class="mt-15" htmlFor="username">User</label>
+            <input onkeypress="submitEarly(event)" placeholder="Enter the username you want to use..." id="username" minlength="1" pattern="[A-za-z0-9]+" type="text" />
+            <label class="mt-15" htmlFor="password">Sudo password</label>
+            <input onkeypress="submitEarly(event)" placeholder="Enter the password you want for running sudo commands..." id="password" minlength="1" type="password" />
+            <label class="mt-15" htmlFor="masterpassword">Master password</label>
+            <input onkeypress="submitEarly(event)" id="masterpassword" minlength="1" type="password" />
+            <button id="submit" class="mt-15">
+              Create server
+            </button>
 
-          <p id="invalid-message"></p>
+            <p id="invalid-message"></p>
 
+          </div>
         </div>
       </div>
     </div>
   </div>
-
 
   <div class="home-dirs">
     <%-
