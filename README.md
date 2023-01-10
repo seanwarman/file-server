@@ -56,13 +56,17 @@ module.exports = {
 }
 ```
 
-Then run the app on port 3000 with:
+If you're using a non-root user you'll have to make a docker group so sudo
+isn't needed to run docker commands... [docker linux post
+install](https://docs.docker.com/engine/install/linux-postinstall/)
+
+Run the app on port 3000 with:
 
 ```bash
 npm run dev
 ```
 
-You'll also need to start the gotty server by running:
+Also start the gotty server by running:
 
 ```bash
 ./gotty-server.sh <username:password>
