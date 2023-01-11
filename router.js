@@ -5,7 +5,7 @@ const readFile = promisify(require('fs').readFile)
 const execFile = promisify(require('child_process').execFile)
 const exec = promisify(require('child_process').exec)
 
-const { MASTER_PASSWORD, BASE_URL, GOTTY_PORT } = require('./env.js')
+const { MASTER_PASSWORD, MASTER_USER, BASE_URL, GOTTY_PORT } = require('./env.js')
 
 const rootDir = __dirname + '/home/'
 
@@ -86,7 +86,7 @@ async function createServer(req, res) {
     .from(authorisation, 'base64').toString().split(' ')[1]
 
   // Decrypt it using your master password. Then convert the CryptoJS object into a utf8 string...
-  const decrypted = CryptoJS.AES.decrypt(encrypted, MASTER_PASSWORD).toString(CryptoJS.enc.Utf8)
+  const decrypted = CryptoJS.AES.decrypt(encrypted, MASTER_USER + MASTER_PASSWORD).toString(CryptoJS.enc.Utf8)
 
   console.log('@FILTER decrypted: ', decrypted)
 
