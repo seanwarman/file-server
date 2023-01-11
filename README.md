@@ -53,7 +53,9 @@ Add an .env file to the root with your own master user and password in it:
 ```posix
 MASTER_USER=coolboy
 MASTER_PASSWORD=cooltimes
-PORT=8080 # any port except 3000 and 8080
+PORT=8081 # to access the app in the browser
+GOTTY_PORT=8080
+EXPRESS_PORT=3000
 ```
 
 If you're using a non-root user you'll have to make a docker group so sudo
