@@ -27,6 +27,8 @@ httpMaster.init({
       },
     },
   },
+}, e => {
+  console.log(e)
 })
 
 app.use(bodyParser.json())
