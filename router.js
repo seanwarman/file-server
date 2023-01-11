@@ -4,9 +4,9 @@ const CryptoJS = require('crypto-js')
 const readFile = promisify(require('fs').readFile)
 const execFile = promisify(require('child_process').execFile)
 const exec = promisify(require('child_process').exec)
-
 require('dotenv').config()
-const { MASTER_PASSWORD, MASTER_USER, BASE_URL, GOTTY_PORT } = process.env
+
+const { MASTER_PASSWORD, MASTER_USER, BASE_URL, PORT } = process.env
 
 const rootDir = __dirname + '/home/'
 
@@ -49,8 +49,7 @@ async function renderIndex(req, res) {
 
     res.render('index.ejs', {
       servers,
-      baseUrl: BASE_URL || 'http://localhost',
-      gottyPort: GOTTY_PORT || '8080',
+      baseUrl: BASE_URL || 'http://localhost:' + PORT,
     })
 
   } catch (e) {
@@ -89,15 +88,10 @@ async function createServer(req, res) {
   // Decrypt it using your master password. Then convert the CryptoJS object into a utf8 string...
   const decrypted = CryptoJS.AES.decrypt(encrypted, MASTER_USER + MASTER_PASSWORD).toString(CryptoJS.enc.Utf8)
 
-  console.log('@FILTER decrypted: ', decrypted)
-
   // Finally split the user:password format...
   const auth = decrypted.split(':')
 
   const [username, password] = auth
-
-  console.log('@FILTER username: ', username)
-  console.log('@FILTER password: ', password)
 
   // If the username isn't the same the client probably used the wrong master
   // password so return unauthorised...
@@ -107,13 +101,10 @@ async function createServer(req, res) {
     // TODO: prevent making the dir if there's a docker error.
 
     const { stdout, stderr } = await execFile(__dirname + '/docker-useradd.sh', [username, password])
-    console.log('@FILTER stdout: ', stdout)
-    console.log('@FILTER stderr: ', stderr)
 
     res.send('Server created')
 
   } catch (error) {
-    console.log('@FILTER error: ', error)
     if (error.message.includes('Command failed')) return res.status(503).send({ message: 'Docker failed' })
     if (error.message.includes('File exists')) return res.status(409).send({ message: 'User exists' })
     res.status(500).send({ message: error.message })
