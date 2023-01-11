@@ -5,8 +5,7 @@ const readFile = promisify(require('fs').readFile)
 const execFile = promisify(require('child_process').execFile)
 const exec = promisify(require('child_process').exec)
 
-require('dotenv').config()
-const { MASTER_PASSWORD, MASTER_USER, BASE_URL, GOTTY_PORT } = process.env
+const { MASTER_PASSWORD, MASTER_USER, BASE_URL, PORT } = process.env
 
 const rootDir = __dirname + '/home/'
 
@@ -49,8 +48,7 @@ async function renderIndex(req, res) {
 
     res.render('index.ejs', {
       servers,
-      baseUrl: BASE_URL || 'http://localhost',
-      gottyPort: GOTTY_PORT || '8080',
+      baseUrl: BASE_URL || 'http://localhost:' + PORT,
     })
 
   } catch (e) {

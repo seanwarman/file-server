@@ -162,7 +162,7 @@
   <div class="home-dirs">
     <%-
       servers.map(userName =>
-        `<a target="_blank" href="${baseUrl}:${gottyPort}/?arg=${userName}&arg=${userName}-server&arg=bash">
+        `<a target="_blank" href="${baseUrl}/console/?arg=${userName}&arg=${userName}-server&arg=bash">
           <i class="las la-file-code"></i>
           <span class="dir-text">
             ${userName}
