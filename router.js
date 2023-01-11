@@ -5,7 +5,8 @@ const readFile = promisify(require('fs').readFile)
 const execFile = promisify(require('child_process').execFile)
 const exec = promisify(require('child_process').exec)
 
-const { MASTER_PASSWORD, MASTER_USER, BASE_URL, GOTTY_PORT } = require('./env.js')
+require('dotenv').config()
+const { MASTER_PASSWORD, MASTER_USER, BASE_URL, GOTTY_PORT } = process.env
 
 const rootDir = __dirname + '/home/'
 
