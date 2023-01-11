@@ -48,12 +48,11 @@ their own modules and fetching them from their own user server.
 
 ## Development
 
-Add an env.js file to the root with your own master password in it:
+Add an .env file to the root with your own master user and password in it:
 
-```js
-module.exports = {
-  MASTER_PASSWORD: 'mypassword'
-}
+```posix
+MASTER_USER=coolboy
+MASTER_PASSWORD=cooltimes
 ```
 
 If you're using a non-root user you'll have to make a docker group so sudo
@@ -69,7 +68,7 @@ npm run dev
 Also start the gotty server by running:
 
 ```bash
-./gotty-server.sh <username:password>
+./gotty-server.sh
 ```
 
 *Note* if you're on a Mac or Windows you'll have to install `gotty` first but the
@@ -78,21 +77,18 @@ binary is included in this app for Linux.
 ## Master Password and Server Creds
 
 Whenever a user wants to make a new server they'll have to use the master
-password you assigned to `MASTER_PASSWORD` to do it.
+user and password you added to the env file.
 
-There's some basic auth on the servers which you set with the *gotty-server.sh*
-command (username:password).
+You'll also need these to access the gotty server for the first time.
 
 ## Deployment
 
-Add a couple of extra env vars to *env.js*:
+Add a couple of extra env vars to *.env*:
 
 ```js
-module.exports = {
-  // ...
-  BASE_URL: 'http://myserveraddress.org',
-  GOTTY_PORT: '8080', // Or any port you want
-}
+// ...
+BASE_URL=http://myserveraddress.org
+GOTTY_PORT=8080, // Or any port you want
 ```
 
 Install docker and get it up and running. Also, if you're using a non-root user
@@ -111,7 +107,7 @@ npm i && npm start
 Then in another window do:
 
 ```posix
-./gotty-server.sh username:password
+./gotty-server.sh
 ```
 
 ## Client
