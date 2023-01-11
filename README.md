@@ -53,6 +53,7 @@ Add an .env file to the root with your own master user and password in it:
 ```posix
 MASTER_USER=coolboy
 MASTER_PASSWORD=cooltimes
+PORT=8080 # any port except 3000 and 8080
 ```
 
 If you're using a non-root user you'll have to make a docker group so sudo
@@ -83,12 +84,12 @@ You'll also need these to access the gotty server for the first time.
 
 ## Deployment
 
-Add a couple of extra env vars to *.env*:
+Add a baseurl to the env file and change the port to 80
 
 ```js
 // ...
+PORT=80
 BASE_URL=http://myserveraddress.org
-GOTTY_PORT=8080, // Or any port you want
 ```
 
 Install docker and get it up and running. Also, if you're using a non-root user
