@@ -113,43 +113,10 @@ Then in another window do:
 ./gotty-server.sh
 ```
 
-## Client
+# Roadmap
 
-The app is being run on port 3000 at the moment so you can go to the server's
-ip and port and see any file based in the dir structure of any
-user's home dir.
-
-For example Yuri has a home dir with *home.html* inside so we can go to
-**http://<ip-addr>:3000/yuri/home.html** to see that file served.
-
-## Server
-
-Run the gotty terminal emulator with:
-
-```posix
-./gotty-server.sh
-```
-
-This will use up a terminal so you'll prob want to do it in tmux. I'll add this
-to the app start command at some point.
-
-It's set to run on 8080.
-
-## Users
-
-The server for each user can be accessed through the browser using gotty.
-
-Make a new user container with the **docker-useradd.sh** script...
-
-```posix
-./docker-useradd.sh yuri yurispassword
-```
-
-This makes a container called `yuri-server` with a user and home dir in it
-called `yuri`. It also makes and binds that dir to another one inside the app's
-home dir.
-
-Now you can go to the browser and run that container inside gotty. Add the
-user's name, the container name and the process you want to run as arguments...
-
-http://myserve.org/?arg=yuri&arg=yuri-server&arg=bash
+- OpenVscode option alternative to GoTTY
+- Server build/startup scripts
+- Allow .vue and .jsx files as template options
+- Default template option for extention-less files (currently only ejs)
+- Port exposure query param arguments (eg `?port=3000&port=3001&arg=perry&arg=perry-server&arg=bash`)
